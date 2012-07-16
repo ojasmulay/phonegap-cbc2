@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recipe Design</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Recipe Design </title>
+    <link rel="stylesheet" href="./css/jquery.mobile-1.1.0.min.css" />
+    <style>
+        /* App custom styles */
+    </style>
+    <script src="./script/jquery.min.js"></script>
+    <script src="./script/jquery.mobile-1.1.0.min.js"></script>
+</head>
+<body>
+    <div data-role="page" id="Design">
+        <div data-role="header" data-position="fixed" data-theme="b">
+            <a href="" onclick="generalpage()" data-icon="arrow-l" data-iconpos="left"  data-theme="c" Style="width:25%">Back</a>
+            <h1>
+                Design</h1>
+            <a href=""  data-icon="Plus" data-theme="c" Style="width:25%;" disabled="true">Edit </a>
+        </div>
+        <div data-role="content" id="cnt" style="overflow-y:auto;overflow-x:auto; ">
+		
+		</div>
+        <div data-role="footer"  data-position="fixed" >
+            <div data-role="navbar" id="nav">
+                <ul id="ftr">
+                </ul>
+            </div>
+            <!-- /navbar -->
+        </div>
+        <!-- /footer -->
+    </div>
+    <script type="text/javascript">
+	
+	
+	$.mobile.hidePageLoadingMsg();
+	
+        var hashes = location.href.slice(location.href.indexOf('/') + 1).split('/');
+        var ipads = hashes[1]
+
+
+
+        var dx = location.href.indexOf("?");
+        var ln = location.href.length
+        var sb = (location.href).substring(dx, ln);
+        var idx = sb.indexOf("=");
+        var lng = sb.length;
+        var resid = sb.substring(idx + 1, lng);
+
+
+        $.ajax({
+            url: "http://10.216.193.240/cbcpoc/rest/recipesvc/design/" + resid,
+            type: "GET",
+            data: '{}',
+            dataType: "jsonp",
+            cache: false,
+            success: onSuccess,
+            error: function () {
+                
+
+            }
+        });
+
+        function onSuccess(data) {
+
+            var i = 0;
+            var arrchk = [];
+            $.each(data, function () {
+
+                i = i + 1;
+
+				var res='<ul data-role="listview" data-inset="true" style="width: 100%">'
+                res=res+'<li class="ui-body ui-body-b">'
+                 res=res+'   <div data-role="content" style="padding-left: 0px; width: 100%">'
+                        res=res+'<input id="txtingredientName" style="color: black;" data-inline="true" value="'+this.ingredientName+'" disabled="true"  />'
+                    res=res+'</div>'
+                    res=res+'<fieldset class="ui-grid-f" style="margin-top:5px">'
+                        res=res+'<div class="ui-block-a" style="width: 33%">'
+						if(this.isFixed==true){
+                            res=res+'<input type="checkbox" name="checkbox-0" data-theme="d" id="chk'+i+'"  style="border-radious:0" checked="ture" class="custom" data-mini="true"  />'
+						}
+						else if(this.isFixed==false){
+							res=res+'<input type="checkbox" name="checkbox-0" data-theme="d" id="chk'+i+'"   class="custom" data-mini="true"  />'
+						}
+                            res=res+'<label for="chk'+i+'"   >Fixed</label>'
+                        res=res+'</div>'
+                        res=res+'<div class="ui-block-c" style="width: 20%; padding-left: 3px;">'
+                            res=res+'<input id="txtQty" data-inline="true" type="text" disabled="true" value="'+this.ingredientQty+'" />'
+                        res=res+'</div>'
+                        res=res+'<div class="ui-block-d" style="width: 10%; padding-left: 14px;">'
+                            res=res+'<label>kg<br />--<br />kg</label>'
+                        res=res+'</div>'
+                        res=res+'<div class="ui-block-d" style="width: 8%; padding-left: 1px;">'
+                            res=res+'<label><br/>+/-</label>'
+                        res=res+'</div>'
+                        res=res+'<div class="ui-block-d" style="width: 10%; padding-left: 3px;">'
+                            res=res+'<input id="txtTol" data-inline="true" disabled="true" value="'+this.ingredientTol+'" />'
+                        res=res+'</div>'
+                        res=res+'<div class="ui-block-e" style="width: 4%; padding-left: 15px;">'
+                            res=res+'<label><br/>%</label>'
+                        res=res+'</div>'
+                    res=res+'</fieldset>'
+                res=res+'</li>'
+            res=res+'</ul>'
+
+                
+
+
+                $('#cnt').append($(res));
+                $('#cnt').trigger('create');
+
+
+                
+
+
+            });
+
+
+            
+
+        }
+
+        var res = '<li><a href="" onclick="generalpage()"  >General</a></li>'
+
+        var res = res + '<li><a href="" class="ui-btn-active"  >Design</a></li>'
+
+        res = res + '<li><a href="" onclick="constpage()"  >Constraints</a></li>'
+
+        $('#ftr').append($(res));
+        $('#ftr').trigger('create');
+
+
+        function generalpage() { $.mobile.showPageLoadingMsg();
+            location.href = "./recipeproperties.html?Recipe=" + resid;
+        }
+
+        function constpage() { $.mobile.showPageLoadingMsg();
+            location.href = "./constraints.html?Recipe=" + resid;
+        }	
+
+
+    </script>
+</body>
+</html>

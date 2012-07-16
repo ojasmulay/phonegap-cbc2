@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Recipe Constraints</title>
+	 <meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	       <link rel="stylesheet" href="./css/jquery.mobile-1.1.0.min.css" />
+        
+        <style>
+            /* App custom styles */
+        </style>
+ 
+	<script src="./script/jquery.min.js"></script>
+    <script src="./script/jquery.mobile-1.1.0.min.js"></script>
+
+</head>
+	<body>
+	<div data-role="page" id="Constraints">
+		<div data-role="header" data-position="fixed" data-theme="b">
+			<a href="" onclick="designpage()"  data-icon="arrow-l" data-iconpos="left" data-theme="c" Style="width:25%" >Back</a>
+			<h1>Constraints</h1>
+			<a href=""  data-icon="Plus" data-theme="c" Style="width:25%" disabled="true">  Edit  </a>
+		</div>
+		
+		<div data-role="content" id="cnt" style="overflow-y:auto;overflow-x:auto;">
+		
+		</div>
+		<div data-role="footer"  data-position="fixed" >		
+			<div data-role="navbar" id="nav">
+				<ul id="ftr">
+					
+				</ul>
+			</div><!-- /navbar -->
+		</div><!-- /footer -->
+
+</div>
+
+<script type="text/javascript"> 
+
+$.mobile.hidePageLoadingMsg();
+
+	var hashes = location.href.slice(location.href.indexOf('/') + 1).split('/');
+	var ipads = hashes[1]
+		
+
+	  
+var dx=   location.href.indexOf("?");
+var ln=location.href.length
+ 
+var sb = (location.href).substring(dx,ln);
+
+var idx = sb.indexOf("=");
+var lng = sb.length;
+var resid = sb.substring(idx+1,lng);
+
+		
+			$.ajax({ 
+					url:"http://10.216.193.240/cbcpoc/rest/recipesvc/constr/"+resid, 
+					type: "GET",
+					data: '{}',
+					dataType: "json",
+					cache: false,
+					success: onSuccess,
+					error: function(){
+						console.log("fail",arguments);
+					}
+				 });
+				
+					function  onSuccess(data){
+
+						$.each(data, function () { 
+					
+							
+							var res='<ul data-role="listview" data-inset="true" style="border-radius:0px; border-width:100px; width:100%" >'
+							res=res+'<li class="ui-body ui-body-b" style="border-radius:0px; padding-bottum:50px;"  >'
+							res=res+'<div data-role="content">'
+							res=res+'	<input id="txtconstraintName" style="color:black"  value="'+this.constraintName+'"  type="text" data-inline="true" disabled="true" />'
+							res=res+'</div>'
+							res=res+'<div data-role="content" style="padding-top:10px">'
+							res=res+'<fieldset class="ui-grid-a">'
+							res=res+'<div class="ui-block-a">'
+							res=res+'	<fieldset style="padding-right:20px;">'
+							res=res+'		<input  style="horizontal-align : middle; color:black"  id="txtQty" value="'+ this.constraintQty+'" type="text" data-inline="true" disabled="true" />'
+							res=res+'	</fieldset>'
+							res=res+'</div>'
+							res=res+'<div class="ui-block-b">'
+							res=res+'	<fieldset style="padding-right:10px;" >'
+							res=res+'		<label style="text-align:bottom">mol/L</label> '
+							res=res+'	</fieldset>'
+							res=res+'</div>'
+							res=res+'</fieldset>'
+							res=res+'</div>'
+							res=res+'</li>'
+							res=res+'</ul>'	
+							
+							
+							
+							$('#cnt').append($(res));
+							$('#cnt').trigger('create');
+							
+						}); 	
+								
+						
+					}
+					
+						var res = '<li><a href="" onclick="generalpage()"  >General</a></li>'
+						var res =res+ '<li><a href="" onclick="designpage()"   >Design</a></li>'
+						
+						res =res+ '<li><a href="" class="ui-btn-active" >Constraints</a></li>'
+						
+						$('#ftr').append($(res));
+						$('#ftr').trigger('create');	
+						
+						
+function generalpage()
+{ $.mobile.showPageLoadingMsg();
+location.href="./recipeproperties.html?Recipe="+resid;
+}
+
+function designpage()
+{ $.mobile.showPageLoadingMsg();
+location.href="./design.html?Recipe="+resid;
+
+}
+		
+				
+											
+			
+			 
+	</script>
+	
+	</body>
+</html>

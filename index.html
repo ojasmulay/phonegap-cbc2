@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	
+		<title>Main Menu</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Main Menu
+        </title>
+       <link rel="stylesheet" href="./css/jquery.mobile-1.1.0.min.css" />
+        
+        <style>
+            /* App custom styles */
+        </style>
+ 
+	<script src="./script/jquery.min.js"></script>
+    <script src="./script/jquery.mobile-1.1.0.min.js"></script>
+		
+<script type="text/javascript">
+		
+	$.mobile.hidePageLoadingMsg();
+	
+function browserpage()
+{
+$.mobile.showPageLoadingMsg();
+
+location.href="./recipebrowser.html";
+}
+
+</script>
+    </head>
+    <body>  
+	<div data-role="page" id="page1"  data-title="Main Menu" >
+            <div data-theme="b" data-role="header">
+            	<img border="0" id="amgenlogo" alt="Amgen" style="float:left;display:inline"/>
+                <h3>
+                    Main Menu
+                </h3>
+            </div>
+            <div data-role="content" data-inset="true">
+		<h3>Browse</h3>
+                <a data-role="button" data-transition="none" rel="externa" data-theme="c" class="show-page-loading-msg" onclick="browserpage()" >
+                    Recipes
+                </a>
+                <a data-role="button" data-transition="fade"  data-theme="c" >
+                    Batches
+                </a>
+</BR>
+		<h3>				Analyse</h3>
+                <a data-role="button" data-transition="fade" href="" data-theme="c">
+                    Variability
+                </a>
+                <a data-role="button" data-transition="fade" href="" data-theme="c">
+                    Acuracy
+                </a>
+            </div>
+            
+        </div>
+       </body>
+       
+    <script type="text/javascript">
+	    var hashes = location.href.slice(location.href.indexOf('/') + 1).split('/');
+		var ipads = hashes[1];
+		document.getElementById('amgenlogo').src = "http://10.216.193.240/cbcpoc/rest/recipesvc/recipe/image";
+    </script>
+</html>

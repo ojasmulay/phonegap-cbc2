@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+    <head>
+<title>New Recipe</title>
+        <meta charset="utf-8" />
+		
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+        <title>
+        </title>
+        <link rel="stylesheet" href="./css/jquery.mobile-1.1.0.min.css" />
+        <link rel="stylesheet" href="./css/validationEngine.jquery.css" type="text/css"/>
+		<link rel="stylesheet" href="./css/template.css" type="text/css"/>
+        <style>
+        
+        </style>
+ 
+	<script src="./script/jquery.min.js"></script>
+    <script src="./script/jquery.mobile-1.1.0.min.js"></script>
+<script src="./script/languages/jquery.validationEngine-en.js" type="text/javascript" charset="utf-8"></script>
+	<script src="./script/jquery.validationEngine.js" type="text/javascript" charset="utf-8"></script>
+    </head>
+    <body>
+
+        <section data-role="page" id="General" data-title="Recipe General Properties">
+		<form id="formID"  method="post" width="100%">
+ 
+ 
+ <div data-role="header" data-position="fixed" data-theme="b">
+  <fieldset class="ui-grid-b" >
+	<div class="ui-block-a" Style="width:35%;" ><input  type="button" value="Cancel" data-theme="c"  onclick="browserpage()"></div>
+	<div class="ui-block-b"  Style="width:35%;" align="center"><br/>New Recipe</div>
+	<div class="ui-block-c"  Style="width:30%;" ><button class="submit" type="submit" data-theme="c" name="submit" value="submit-value" >Done</button></div>
+	</fieldset>
+</div>
+
+
+
+
+
+<div data-role="content" >
+
+<ul data-role="listview" data-inset="true">
+<li class="ui-body ui-body-b">
+	<fieldset class="ui-grid-a" >
+		<div class="ui-block-a" style="width: 35%;" >
+			<fieldset >
+                <label for="txtRecipeNo" >
+                      Recipe No
+                </label>
+				
+                <input id="txtRecipeNo" style="color:black; width: 80%;" class="validate[required] text-input"  data-inline="true"/>
+				
+            </fieldset>
+		</div>
+		<div class="ui-block-b"  style="width: 50%;" id="dynamicstatus">
+			
+		</div>
+		
+	</fieldset>
+</li>
+<li class="ui-body ui-body-b">
+	<fieldset style="padding-right:5px;" >
+                        <label for="txtDes">Description</label>
+			<textarea  name="textarea"  id="txtDes" width="100%"></textarea>
+	</fieldset>
+</li>
+
+
+<li class="ui-body ui-body-b">
+	<fieldset class="ui-grid-b">
+		<div class="ui-block-a" style="width: 25%; margin-top:2%" ><label for="txtDensity" align="left" data-position="inline" style="vertical-align:bottom" >Density</label></div>
+						<div class="ui-block-b" align="right" style="width:40%;">
+						<input id="txtDensity" type="text" align="right"   class="validate[custom[number4]] text-input" data-inline="true" />
+						</div>
+						 <div class="ui-block-c" style="width: 30%;" align="right" ><label data-position="inline"><br/>kg/m^3</label> </div>
+				
+				
+		
+	</fieldset>
+</li>
+
+<li class="ui-body ui-body-b">
+	<fieldset class="ui-grid-d">
+				<div class="ui-block-a"  style="width:40%;"><label for="txtDensity" >Operating<br/> Temperature</label></div>
+                <div class="ui-block-b" style="width:15%;">
+						    <input   id="txtoptemp" type="text" data-inline="true" class="validate[custom[number2]] text-input" />
+                            </div>
+                            <div class="ui-block-c" style="  width:12%; padding-left:15px;"> <label><br/>+/-</label> </div>	
+                            <div class="ui-block-d"  style="  width:15%;">
+							    <input id="txttolTemp" type="text" data-inline="true" 	class="validate[custom[number1]] text-input"   style="horizontal-align:right; width:30px;"  />
+                             </div>
+                            <div class="ui-block-d" style=" width:4%; padding-left:10px;"><label><br/>c</label> </div>	
+	
+	</fieldset>
+</li>
+
+
+
+</ul>
+
+</div>
+
+</form>
+
+
+
+</section>
+
+ <script type="text/javascript">
+ 
+$.mobile.hidePageLoadingMsg();
+var hashes = location.href.slice(location.href.indexOf('/') + 1).split('/');
+	var ipads = hashes[1]
+
+$(document).ready(function(){
+$("#formID").validationEngine('attach', {
+onValidationComplete: function(form, status){
+
+    if (status == true){
+      
+		
+		SaveRecipe();
+    }
+    }     
+  });
+});
+ 
+ 
+ 
+$.ajax({ 
+					url:"http://10.216.193.240/cbcpoc/rest/recipesvc/recipe/recipestatus", 
+					type: "GET",
+					data: '{}',
+					dataType: "jsonp",
+					cache: false,
+					success: onSuccess,
+					error: function(){alert("Error");
+						
+					}
+					
+				 });
+				
+					function  onSuccess(data){
+					
+					 var html ='<fieldset style="padding-left:5px;  width: 70%;" ><label class="ui-input-text" for="selectSattus">Status</label>'+
+						' <select id="selectSattus"  data-native-menu="false" data-theme="c" data-validation-engine="validate[required]"  padding-right="10px" ><option fontsize="5px">Select Status</option>'
+       
+    
+							
+						$.each(data, function () {
+						
+						html=html+ '<option value="'+this.statusId+'">'+this.statusDescription+'</option>'
+       
+    
+								
+							
+						});
+						
+						 html=html+'</select> </fieldset>';
+						 
+					$('#dynamicstatus').append(html).trigger("create");
+					
+					
+					}
+ 
+ 
+function SaveRecipe(){
+
+
+
+var status = $("#selectSattus option:selected").text();
+if($("#selectSattus option:selected").text()=="Select Status"){ alert("Select Status","sdfsssssss"); return false; }
+
+$.ajax({ 
+		url:"http://10.216.193.240/cbcpoc/rest/recipesvc/recipe/add?recipeNo="+$("#txtRecipeNo").val()+"&recipeStatus="+$("#selectSattus option:selected").text()+"&recipeDesc="+$("#txtDes").val()+"&recipeDensity="+$("#txtDensity").val()+"&opTemp="+$("#txtoptemp").val()+"&tolTemp="+$("#txttolTemp").val(),
+		type: "POST",
+		data: '{}',
+		dataType: "json",
+		cache: false,
+		success: function() {
+		
+			location.href="./recipebrowser.html"
+							
+		 },
+		
+		error: function(){alert("error");
+            
+		}
+	 });
+	 
+	 
+ }
+ 
+ 
+function browserpage()
+{
+$.mobile.showPageLoadingMsg();
+
+location.href="./recipebrowser.html";
+}
+	
+	
+  </script>
+    </body>
+</html>
